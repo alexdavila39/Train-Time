@@ -1,33 +1,43 @@
 
+  // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyDhhRoI4PVerxqzO_bN6Uo8NjexPmoiGl4",
-    authDomain: "train-scheduler-2ea1e.firebaseapp.com",
-    databaseURL: "https://train-scheduler-2ea1e.firebaseio.com",
-    projectId: "train-scheduler-2ea1e",
-    storageBucket: "train-scheduler-2ea1e.appspot.com",
-    messagingSenderId: "924038540801"
+        apiKey: "AIzaSyANgekwXCR8MrqwcJC1VkVl-vVBP30rUhU",
+        authDomain: "train-time-348e2.firebaseapp.com",
+        databaseURL: "https://train-time-348e2.firebaseio.com",
+        projectId: "train-time-348e2",
+        storageBucket: "",
+        messagingSenderId: "659450042912"
   };
   firebase.initializeApp(config);
   
 var database = firebase.database();
 
-$("#addTrainBtn").on("click", function(){
-    var trainName = $("#trainNameInput").val().trim();
-    var destination = $("#destinationInput").val().trim();
-    var firstTrain = moment($("#firstTrainInput").val().trim(), "HH:mm").subtract(10, "years").format("x");
-    var frequency = $("#frequencyInput").val().trim();
-    
+// var name = "";
+// var destination = "";
+// var frequency = "";
+// var firstTrain = "";
 
-    var newTrain ={
-        name: trainName,
+
+$("#addTrainBtn").on("click", function(event){
+    event.preventDefault();
+
+
+     trainName = $("#trainInput").val().trim();
+     destination = $("#destinationInput").val().trim();
+     firstTrain = moment($("#firstTrainInput").val().trim(), "HH:mm").subtract(10, "years").format("x");
+     frequency = $("#frequencyInput").val().trim();
+     
+     database.ref().push({
+
+    
+        traiName: trainName,
         destination: destination,
         firstTrain: firstTrain,
         frequency: frequency,
-    };
+    }); 
+   
 
-    database.ref().push(newTrain);
-
-    $("#trainNameInput").val("");
+    $("#trainInput").val("");
     $("#destinationInput").val("");
     $("#firstTrainInput").val("");
     $("#frequencyInput").val("");
@@ -35,7 +45,7 @@ $("#addTrainBtn").on("click", function(){
     return false;
 })
 
-database.ref().on("value", function(snapshot){
+database.ref().on("child_added", function(snapshot){
     var name = snapshot.val().name;
     var destination = snapshot.val().destination;
     var frequency = snapshot.val().frequency;
