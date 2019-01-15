@@ -5,17 +5,12 @@ var config = {
         authDomain: "train-time-348e2.firebaseapp.com",
         databaseURL: "https://train-time-348e2.firebaseio.com",
         projectId: "train-time-348e2",
-        storageBucket: "",
+        storageBucket:  "train-time-348e2.appspot.com",
         messagingSenderId: "659450042912"
   };
   firebase.initializeApp(config);
   
 var database = firebase.database();
-
-// var name = "";
-// var destination = "";
-// var frequency = "";
-// var firstTrain = "";
 
 
 $("#addTrainBtn").on("click", function(event){
@@ -24,17 +19,18 @@ $("#addTrainBtn").on("click", function(event){
 
      trainName = $("#trainInput").val().trim();
      destination = $("#destinationInput").val().trim();
-     firstTrain = moment($("#firstTrainInput").val().trim(), "HH:mm").subtract(10, "years").format("x");
+     firstTrain = moment($("#firstTrainInput").val().trim(), "HH:mm").subtract(1, "years").format("x");
      frequency = $("#frequencyInput").val().trim();
      
-     database.ref().push({
 
-    
-        traiName: trainName,
+    var newTrain= {
+        name: trainName,
         destination: destination,
         firstTrain: firstTrain,
         frequency: frequency,
-    }); 
+    }
+
+    database.ref().push(newTrain);
    
 
     $("#trainInput").val("");
@@ -58,7 +54,11 @@ database.ref().on("child_added", function(snapshot){
     console.log(remainder);
     console.log(minutes);
     console.log(arrival);
-})
-  
 
- 
+  
+$("#trainTable > tBody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + arrival + "</td><td>" + minutes  + "</td></tr>")
+
+
+});
+
+// $("#currentTime").html("Current Time: " + moment(currentTime).format("hh:mm"));
